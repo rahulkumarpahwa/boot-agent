@@ -13,14 +13,19 @@ client = OpenAI(
     api_key=api_key,
 )
 
+parser = argparse.ArgumentParser(description="Chatbot")
+parser.add_argument("user_prompt", type=str, help="User prompt")
+args = parser.parse_args()
+# Now we can access `args.user_prompt`
+
+messages = [
+    {"role": "user", "content": args.user_prompt},
+]
+
+
 response = client.chat.completions.create(
     model="openrouter/free",
-    messages=[
-        {
-            "role": "user",
-            "content": "Why is Boot.dev such a great place to learn backend development? Use one paragraph maximum.",
-        }
-    ],
+    messages=messages,
 )
 
 if response.usage is not None:
