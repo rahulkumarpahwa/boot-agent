@@ -1,4 +1,4 @@
-import os
+import os, argparse
 from dotenv import load_dotenv
 from openai import OpenAI
 
@@ -22,3 +22,11 @@ response = client.chat.completions.create(
         }
     ],
 )
+
+if response.usage is not None:
+    print(f"Prompt tokens: {response.usage.prompt_tokens}")
+    print(f"Response tokens: {response.usage.completion_tokens}")
+else:
+    raise RuntimeError("failed api request. no usage of response.")
+
+print(response.choices[0].message.content)
