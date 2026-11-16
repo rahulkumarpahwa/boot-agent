@@ -1,6 +1,6 @@
 import os
 
-
+from config import MAX_CHARS
 
 def get_file_content(working_directory: str, file_path: str) -> str:
     absolute_working_directory_path = os.path.abspath(working_directory)
@@ -14,7 +14,6 @@ def get_file_content(working_directory: str, file_path: str) -> str:
     if valid_target_path == False:
         return f'Error: Cannot read "{file_path}" as it is outside the permitted working directory'
 
-    MAX_CHARS = 10_000
 
     with open(final_path, "r") as f:
         content = f.read(MAX_CHARS)
