@@ -1,4 +1,5 @@
 import os, argparse
+
 from dotenv import load_dotenv
 from openai import OpenAI
 
@@ -15,6 +16,7 @@ client = OpenAI(
 
 parser = argparse.ArgumentParser(description="Chatbot")
 parser.add_argument("user_prompt", type=str, help="User prompt")
+parser.add_argument("--verbose", action="store_true", help="Enable verbose output")
 args = parser.parse_args()
 # Now we can access `args.user_prompt`
 
@@ -29,9 +31,12 @@ response = client.chat.completions.create(
 )
 
 if response.usage is not None:
-    print(f"Prompt tokens: {response.usage.prompt_tokens}")
-    print(f"Response tokens: {response.usage.completion_tokens}")
+    if args.verbose == True:
+        print(f"User prompt: {args.user_prompt}")
+        print(f"Prompt tokens: {response.usage.prompt_tokens}")
+        print(f"Response tokens: {response.usage.completion_tokens}")
 else:
     raise RuntimeError("failed api request. no usage of response.")
+
 
 print(response.choices[0].message.content)
