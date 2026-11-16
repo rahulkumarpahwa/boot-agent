@@ -2,7 +2,7 @@ import unittest
 from functions.get_files_info import get_files_info
 
 
-class TestCalculator(unittest.TestCase):
+class TestGetFileInfo(unittest.TestCase):
     def test_get_files_info1(self) -> None:
         result = get_files_info("calculator", ".")
         print(result)
