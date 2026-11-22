@@ -1,8 +1,9 @@
-import os, argparse
+import os, argparse, json
 
 from dotenv import load_dotenv
 from openai import OpenAI
 from prompts import system_prompt
+from call_function import available_functions
 
 load_dotenv()
 api_key = os.environ.get("OPENROUTER_API_KEY")
@@ -30,6 +31,7 @@ response = client.chat.completions.create(
     model="openrouter/free",
     messages=messages,
     temperature=0,
+    tools=available_functions,
 )
 
 if response.usage is not None:
@@ -40,5 +42,12 @@ if response.usage is not None:
 else:
     raise RuntimeError("failed api request. no usage of response.")
 
+message = response.choices[0].message
 
-print(response.choices[0].message.content)
+if message.content !=  None:
+    print(response.choices[0].message.content)
+        
+if message.tool_calls:
+    for tool_call in message.tool_calls:
+        function_args = json.loads(tool_call.function.arguments or "{}")
+        print(f"Calling function: {tool_call.function.name}({function_args})")
